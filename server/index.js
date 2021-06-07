@@ -16,7 +16,7 @@ app.post("/game", (req, res) => {
   db().collection("games").insertOne({ _id: gameId, fen });
 
   res.json({
-    gameId: "someid",
+    gameId,
     fen,
   });
 });
