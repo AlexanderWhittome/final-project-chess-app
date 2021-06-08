@@ -2,7 +2,7 @@ import React, { useReducer } from "react";
 
 export const GameContext = React.createContext(null);
 
-const EMPTY_BOARD = "8/8/8/8/8/8/8/8";
+const EMPTY_BOARD = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
 
 const initialState = {
   gameId: "",
