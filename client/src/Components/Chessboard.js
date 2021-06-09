@@ -1,13 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
-import { GameContext } from "../GameProvider";
 import { getArrayOfImages } from "../helpers";
 const ranks = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
-const Chessboard = () => {
-  const { state, dispatch } = useContext(GameContext);
-  const { fen } = state;
+const Chessboard = ({ fen }) => {
   const arrayOfImages = getArrayOfImages(fen);
   let board = [];
 
@@ -19,13 +16,13 @@ const Chessboard = () => {
 
       if (num % 2 === 0) {
         board.push(
-          <div className="square dark-square">
+          <div id={`square-${counter}`} className="square dark-square">
             {arrayOfImages[counter] && <img src={arrayOfImages[counter]} />}
           </div>
         );
       } else {
         board.push(
-          <div className="square light-square">
+          <div id={`square-${counter}`} className="square light-square">
             {arrayOfImages[counter] && <img src={arrayOfImages[counter]} />}
           </div>
         );

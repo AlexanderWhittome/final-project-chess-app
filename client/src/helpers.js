@@ -11,8 +11,6 @@ import whiteQueen from "./assets/images/Chess_qlt60.png";
 import blackPawn from "./assets/images/Chess_pdt60.png";
 import whitePawn from "./assets/images/Chess_plt60.png";
 export const getArrayOfImages = (fen) => {
-  console.log(fen, "asdasdasdasd");
-
   let arr = [];
   fen
     .split("/")
@@ -20,17 +18,14 @@ export const getArrayOfImages = (fen) => {
     .split("")
     .forEach((e) => {
       const num = parseInt(e);
-      console.log(num);
       if (num) {
         for (let i = 0; i < num; i++) {
           arr.push(null);
         }
       } else {
-        console.log("taco");
         arr.push(getImageFromCharacter(e));
       }
     });
-  console.log(arr);
   return arr;
 };
 

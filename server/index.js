@@ -21,17 +21,20 @@ app.post("/game", (req, res) => {
   });
 });
 
-app.put("/game/:gameId", (req, res) => {
-  //get fen from req payload, update mongo and send back updated fen
+//get endpoint for get game by id
+
+app.get("/game/:gameId", (req, res) => {
+  console.log("asd");
   res.json({
     gameId: "someid",
     fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
   });
 });
 
-//get endpoint for get game by id
-
-app.get("/game/:gameId", (req, res) => {
+app.put("/game/move", (req, res) => {
+  const { startingSquare, endingSquare } = req.body;
+  console.log("asd");
+  console.log(req.body);
   res.json({
     gameId: "someid",
     fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
