@@ -1,10 +1,16 @@
 import React from "react";
 import styled from "styled-components";
+// import { Chess } from "chess.js";
 import { getArrayOfImages } from "../helpers";
+import Square from "./Square";
 const ranks = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
-const Chessboard = ({ fen }) => {
+const Chessboard = ({ fen, setState }) => {
+  // const chess = new Chess();
+
+  // chess.move("e4");
+
   const arrayOfImages = getArrayOfImages(fen);
   let board = [];
 
@@ -13,18 +19,26 @@ const Chessboard = ({ fen }) => {
   for (let i = ranks.length - 1; i >= 0; i--) {
     for (let j = 0; j < files.length; j++) {
       const num = j + i;
-
+      // console.log(ranks[i], files[j], "coords");
       if (num % 2 === 0) {
         board.push(
-          <div id={`square-${counter}`} className="square dark-square">
-            {arrayOfImages[counter] && <img src={arrayOfImages[counter]} />}
-          </div>
+          <Square
+            setState={setState}
+            darkSquare
+            coordinates={`${files[j]}${ranks[i]}`}
+            piece={arrayOfImages[counter]}
+            counter={counter}
+          />
         );
       } else {
         board.push(
-          <div id={`square-${counter}`} className="square light-square">
-            {arrayOfImages[counter] && <img src={arrayOfImages[counter]} />}
-          </div>
+          <Square
+            setState={setState}
+            lightSquare
+            coordinates={`${files[j]}${ranks[i]}`}
+            piece={arrayOfImages[counter]}
+            counter={counter}
+          />
         );
       }
       counter++;

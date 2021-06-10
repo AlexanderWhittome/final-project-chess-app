@@ -1,3 +1,4 @@
+const { Chess } = require("chess.js");
 const express = require("express");
 const bodyParser = require("body-parser");
 const { initialiseMongoClient, db } = require("./db");
@@ -7,12 +8,14 @@ initialiseMongoClient();
 const app = express();
 
 app.use(bodyParser.json());
-
+const chess = new Chess();
 app.post("/game", (req, res) => {
   //generate new game id
   //add new document to game collection in mongo
+
+  const fen = chess.fen();
+
   const gameId = uuid();
-  const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
   db().collection("games").insertOne({ _id: gameId, fen });
 
   res.json({
@@ -31,13 +34,20 @@ app.get("/game/:gameId", (req, res) => {
   });
 });
 
-app.put("/game/move", (req, res) => {
-  const { startingSquare, endingSquare } = req.body;
+app.post("/game/move", (req, res) => {
+  const { startingSquare, endingSquare, coordinates } = req.body;
+
+  chess.move("e4");
+  chess.move("e5");
+  chess.move("Nf3");
+  chess.move("Nc6");
+  chess.move("Bc4");
+  chess.move("Qc7");
   console.log("asd");
   console.log(req.body);
   res.json({
     gameId: "someid",
-    fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
+    fen: chess.fen(),
   });
 });
 

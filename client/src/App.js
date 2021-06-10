@@ -64,7 +64,7 @@ function App() {
     }
 
     fetch("/game/move", {
-      header: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" },
       method: "PUT",
       body: JSON.stringify({
         startingSquare: action.startingSquare,
@@ -89,7 +89,7 @@ function App() {
 
   return (
     <Wrapper>
-      <Chessboard fen={state.fen} />
+      <Chessboard fen={state.fen} setState={setState} />
     </Wrapper>
   );
 }
