@@ -1,54 +1,43 @@
 const { Chess } = require("chess.js");
 const express = require("express");
 const bodyParser = require("body-parser");
-const { initialiseMongoClient, db } = require("./db");
 const uuid = require("uuid").v4;
+const { initialiseMongoClient, db } = require("./db");
+
 initialiseMongoClient();
+
+const chess = new Chess();
 
 const app = express();
 
 app.use(bodyParser.json());
-const chess = new Chess();
+
 app.post("/game", (req, res) => {
   //generate new game id
   //add new document to game collection in mongo
 
   const fen = chess.fen();
 
-  const gameId = uuid();
-  db().collection("games").insertOne({ _id: gameId, fen });
+  db().collection("games").insertOne({ fen });
 
-  res.json({
-    gameId,
-    fen,
-  });
+  res.send(fen);
 });
 
-//get endpoint for get game by id
+app.put("/game/move", (req, res) => {
+  const { startingSquare, endingSquare } = req.body;
+  console.log(startingSquare, endingSquare);
+  chess.move(`${startingSquare}-${endingSquare}`, { sloppy: true });
 
-app.get("/game/:gameId", (req, res) => {
-  console.log("asd");
-  res.json({
-    gameId: "someid",
-    fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
-  });
-});
+  // chess.move("e4");
+  // chess.move("e5");
+  // chess.move("Nf3");
+  // chess.move("Nc6");
+  // chess.move("Bc4");
+  // chess.move("a8-b8", { sloppy: true });
+  // chess.move("e1-e2", { sloppy: true });
+  // chess.move("g8-e6", { sloppy: true });
 
-app.post("/game/move", (req, res) => {
-  const { startingSquare, endingSquare, coordinates } = req.body;
-
-  chess.move("e4");
-  chess.move("e5");
-  chess.move("Nf3");
-  chess.move("Nc6");
-  chess.move("Bc4");
-  chess.move("Qc7");
-  console.log("asd");
-  console.log(req.body);
-  res.json({
-    gameId: "someid",
-    fen: chess.fen(),
-  });
+  res.send(chess.fen());
 });
 
 app.get("*", (req, res) => {

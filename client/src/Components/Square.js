@@ -1,32 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-const Square = ({
-  coordinates,
-  piece,
-  counter,
-  darkSquare,
-  lightSquare,
-  setState,
-}) => {
-  const movePiece = () => {
-    fetch("/game/move", {
-      headers: { "Content-Type": "application/json" },
-      method: "POST",
-      body: JSON.stringify({ coordinates }),
-    })
-      .then((res) => res.json())
-      .then((data) => setState({ fen: data.fen }));
-
-    console.log(coordinates, "move piece");
-  };
-
+const Square = ({ piece, counter, darkSquare, lightSquare }) => {
   return (
-    <Wrapper
-      darkSquare={darkSquare}
-      lightSquare={lightSquare}
-      onClick={movePiece}
-    >
+    <Wrapper darkSquare={darkSquare} lightSquare={lightSquare}>
       {piece && <img src={piece} />}
     </Wrapper>
   );

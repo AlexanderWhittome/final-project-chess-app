@@ -4,92 +4,87 @@ import Chessboard from "./Components/Chessboard";
 
 const EMPTY_BOARD = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
 
-const getIndexFromClickEvent = (e) => {
-  const [square, index] = e.target.id.split("-");
+// const getIndexFromClickEvent = (e) => {
+//   const [square, index] = e.target.id.split("-");
 
-  if (square === "square") {
-    return parseInt(index);
-  } else {
-    const [innerSquare, innerIndex] = e.target.parentElement.id.split("-");
+//   if (square === "square") {
+//     return parseInt(index);
+//   } else {
+//     const [innerSquare, innerIndex] = e.target.parentElement.id.split("-");
 
-    if (innerSquare === "square") {
-      return parseInt(innerIndex);
-    }
-  }
-};
+//     if (innerSquare === "square") {
+//       return parseInt(innerIndex);
+//     }
+//   }
+// };
 
 function App() {
-  const [state, setState] = useState({ isLoading: true });
-  const [action, setAction] = useState({});
+  const [fen, setFen] = useState(null);
+  const [clickedSquare, setClickedSquare] = useState({});
+  const [blockUserInput, setBlockUserInput] = useState(false);
+
+  const handleClick = (e) => {
+    // need to get which square from event and then do
+    e.stopPropagation();
+
+    const squareThatWasClickOn = "a8"; // need to figure this out from "e"
+
+    setClickedSquare({ startingSquare: "e2", endingSquare: "e4" });
+
+    // setClickedSquare((current) => {
+    //   if (!current.startingSquare) {
+    //     return { startingSquare: squareThatWasClickOn };
+    //   } else {
+    //     return { ...current, endingSquare: squareThatWasClickOn };
+    //   }
+    // });
+    console.log(e.target, "target");
+  };
+
   useEffect(() => {
     fetch("/game", { method: "POST" })
-      .then((res) => res.json())
-      .then((data) => {
-        setState({ gameId: data.gameId, fen: data.fen, isLoading: false });
-
-        document.addEventListener("mousedown", (e) => {
-          e.preventDefault();
-          const index = getIndexFromClickEvent(e);
-          // console.log(index, "mousedown");
-
-          if (typeof index !== "number") {
-            return;
-          }
-          setAction({ startingSquare: index });
-        });
-
-        document.addEventListener("mouseup", (e) => {
-          const index = getIndexFromClickEvent(e);
-          // console.log(index, "mouseup");
-          if (typeof index !== "number") {
-            return;
-          }
-          setAction((currentVal) => {
-            if (typeof index !== "number") {
-              return {};
-            }
-
-            return { ...currentVal, endingSquare: index };
-          });
-        });
-      })
-      .catch((error) => {
-        setState({ error, isLoading: false });
+      .then((res) => res.text())
+      .then((fen) => {
+        setFen(fen);
+        console.log(fen, "fen");
+        document.addEventListener("click", handleClick);
       });
   }, []);
 
   useEffect(() => {
-    if (!action.startingSquare || !action.endingSquare) {
+    const { startingSquare, endingSquare } = clickedSquare;
+
+    if (blockUserInput || !startingSquare || !endingSquare) {
       return;
     }
+
+    setBlockUserInput(true);
+
+    setClickedSquare({});
 
     fetch("/game/move", {
       headers: { "Content-Type": "application/json" },
       method: "PUT",
       body: JSON.stringify({
-        startingSquare: action.startingSquare,
-        endingSquare: action.endingSquare,
+        startingSquare,
+        endingSquare,
       }),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        setState({ gameId: data.gameId, fen: data.fen, isLoading: false });
+      .then((res) => res.text())
+      .then((fen) => {
+        console.log("THE FEN,", fen);
+        setFen(fen);
+        setBlockUserInput(false);
       });
+  }, [clickedSquare, blockUserInput]);
 
-    console.log(action, "action");
-  }, [action]);
-
-  if (state.error || (!state.isLoading && !state.fen)) {
-    return <div>{state.error || "something went wrong"}</div>;
-  }
-
-  if (state.isLoading) {
+  if (!fen) {
     return <div>please wait</div>;
   }
 
   return (
     <Wrapper>
-      <Chessboard fen={state.fen} setState={setState} />
+      <Chessboard fen={fen} />
     </Wrapper>
   );
 }
