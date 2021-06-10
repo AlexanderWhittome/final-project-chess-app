@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-const Square = ({ piece, counter, darkSquare, lightSquare }) => {
+const Square = ({ id, piece, darkSquare, lightSquare }) => {
   return (
-    <Wrapper darkSquare={darkSquare} lightSquare={lightSquare}>
+    <Wrapper id={id} darkSquare={darkSquare} lightSquare={lightSquare}>
       {piece && <img src={piece} />}
     </Wrapper>
   );

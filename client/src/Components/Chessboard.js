@@ -7,10 +7,6 @@ const ranks = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
 const Chessboard = ({ fen, setState }) => {
-  // const chess = new Chess();
-
-  // chess.move("e4");
-
   const arrayOfImages = getArrayOfImages(fen);
   let board = [];
 
@@ -19,28 +15,19 @@ const Chessboard = ({ fen, setState }) => {
   for (let i = ranks.length - 1; i >= 0; i--) {
     for (let j = 0; j < files.length; j++) {
       const num = j + i;
-      // console.log(ranks[i], files[j], "coords");
+
+      const id = `square-${files[j]}${ranks[i]}`;
+
       if (num % 2 === 0) {
         board.push(
-          <Square
-            setState={setState}
-            darkSquare
-            coordinates={`${files[j]}${ranks[i]}`}
-            piece={arrayOfImages[counter]}
-            counter={counter}
-          />
+          <Square id={id} darkSquare piece={arrayOfImages[counter]} />
         );
       } else {
         board.push(
-          <Square
-            setState={setState}
-            lightSquare
-            coordinates={`${files[j]}${ranks[i]}`}
-            piece={arrayOfImages[counter]}
-            counter={counter}
-          />
+          <Square id={id} lightSquare piece={arrayOfImages[counter]} />
         );
       }
+
       counter++;
     }
   }

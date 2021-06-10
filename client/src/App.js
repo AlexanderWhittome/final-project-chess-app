@@ -4,19 +4,19 @@ import Chessboard from "./Components/Chessboard";
 
 const EMPTY_BOARD = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
 
-// const getIndexFromClickEvent = (e) => {
-//   const [square, index] = e.target.id.split("-");
+const getSquareFromClickEvent = (e) => {
+  const [kind, squareName] = e.target.id.split("-");
 
-//   if (square === "square") {
-//     return parseInt(index);
-//   } else {
-//     const [innerSquare, innerIndex] = e.target.parentElement.id.split("-");
+  if (kind === "square") {
+    return squareName;
+  } else {
+    const [innerKind, innerSquareName] = e.target.parentElement.id.split("-");
 
-//     if (innerSquare === "square") {
-//       return parseInt(innerIndex);
-//     }
-//   }
-// };
+    if (innerKind === "square") {
+      return innerSquareName;
+    }
+  }
+};
 
 function App() {
   const [fen, setFen] = useState(null);
@@ -25,20 +25,20 @@ function App() {
 
   const handleClick = (e) => {
     // need to get which square from event and then do
-    e.stopPropagation();
 
-    const squareThatWasClickOn = "a8"; // need to figure this out from "e"
+    console.log(e.target);
 
-    setClickedSquare({ startingSquare: "e2", endingSquare: "e4" });
+    const squareThatWasClickOn = getSquareFromClickEvent(e); // need to figure this out from "e"
 
-    // setClickedSquare((current) => {
-    //   if (!current.startingSquare) {
-    //     return { startingSquare: squareThatWasClickOn };
-    //   } else {
-    //     return { ...current, endingSquare: squareThatWasClickOn };
-    //   }
-    // });
-    console.log(e.target, "target");
+    // setClickedSquare({ startingSquare: "e2", endingSquare: "e4" });
+
+    setClickedSquare((current) => {
+      if (!current.startingSquare) {
+        return { startingSquare: squareThatWasClickOn };
+      } else {
+        return { ...current, endingSquare: squareThatWasClickOn };
+      }
+    });
   };
 
   useEffect(() => {
@@ -46,7 +46,6 @@ function App() {
       .then((res) => res.text())
       .then((fen) => {
         setFen(fen);
-        console.log(fen, "fen");
         document.addEventListener("click", handleClick);
       });
   }, []);
@@ -72,7 +71,6 @@ function App() {
     })
       .then((res) => res.text())
       .then((fen) => {
-        console.log("THE FEN,", fen);
         setFen(fen);
         setBlockUserInput(false);
       });
