@@ -6,7 +6,7 @@ import Square from "./Square";
 const ranks = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
-const Chessboard = ({ fen, setState }) => {
+const Chessboard = ({ fen, setState, selectedSquare }) => {
   const arrayOfImages = getArrayOfImages(fen);
   let board = [];
 
@@ -15,16 +15,26 @@ const Chessboard = ({ fen, setState }) => {
   for (let i = ranks.length - 1; i >= 0; i--) {
     for (let j = 0; j < files.length; j++) {
       const num = j + i;
-
-      const id = `square-${files[j]}${ranks[i]}`;
-
+      const square = `${files[j]}${ranks[i]}`;
+      const id = `square-${square}`;
+      const isSelected = square === selectedSquare;
       if (num % 2 === 0) {
         board.push(
-          <Square id={id} darkSquare piece={arrayOfImages[counter]} />
+          <Square
+            id={id}
+            darkSquare
+            piece={arrayOfImages[counter]}
+            isSelected={isSelected}
+          />
         );
       } else {
         board.push(
-          <Square id={id} lightSquare piece={arrayOfImages[counter]} />
+          <Square
+            id={id}
+            lightSquare
+            piece={arrayOfImages[counter]}
+            isSelected={isSelected}
+          />
         );
       }
 
