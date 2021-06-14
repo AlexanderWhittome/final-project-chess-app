@@ -25,10 +25,19 @@ app.post("/game", (req, res) => {
 
 app.put("/game/move", (req, res) => {
   try {
-    const { move, from, to, piece, captured } = req.body;
-    chess.move(move ? move : { from, to, piece, captured });
+    const { move, from, to, piece, captured, promotion } = req.body;
+    const moves = move ? move : { from, to, piece, captured, promotion };
+    console.log(moves);
+    chess.move(moves);
     console.log(move, "move");
-    res.send(chess.fen());
+    res.json({
+      fen: chess.fen(),
+      checkmate: chess.in_checkmate(),
+      draw: chess.in_draw(),
+      stalemate: chess.in_stalemate(),
+      threefoldRepetition: chess.in_threefold_repetition(),
+      insufficientMaterial: chess.insufficient_material(),
+    });
   } catch (error) {
     console.log("ERROR!!!", error);
 

@@ -9,31 +9,34 @@ const Square = ({
   // isSelected,
   pieceSelected,
   setPieceSelected,
-  setFen,
+  setGameState,
   square,
   file,
 }) => {
-  const handleCapture = () => {
-    if (pieceSelected.id.toLowerCase() === "p") {
-      return `${pieceSelected.file}x${square}`;
-    }
+  // const handleCapture = () => {
+  //   if (pieceSelected.id.toLowerCase() === "p") {
+  //     return `${pieceSelected.file}x${square}`;
+  //   }
 
-    return `${pieceSelected.id.toUpperCase()}x${square}`;
-  };
+  //   return `${pieceSelected.id.toUpperCase()}x${square}`;
+  // };
 
   const handleMove = () => {
     // if (piece) {
     //   return { move: handleCapture() };
     // }
 
+    const isPawn = pieceSelected.id.toLowerCase() === "p";
+    let promotion;
+    if (isPawn && (square[1] === "8" || square[1] === "1")) {
+      promotion = "q";
+    }
+    console.log("square", square, promotion);
     return {
       from: `${pieceSelected.square}`,
       to: `${square}`,
-
-      piece:
-        pieceSelected.id.toLowerCase() === "p"
-          ? ""
-          : pieceSelected.id.toUpperCase(),
+      promotion,
+      piece: isPawn ? "" : pieceSelected.id.toUpperCase(),
 
       captured: piece,
     };
@@ -51,14 +54,13 @@ const Square = ({
     fetch("/game/move", {
       headers: { "Content-Type": "application/json" },
       method: "PUT",
-      body: JSON.stringify({
-        ...handleMove(),
-      }),
+      body: JSON.stringify(handleMove()),
     })
-      .then((res) => res.text())
-      .then((fen) => {
-        console.log(fen, "goodfen");
-        setFen(fen);
+      .then((res) => res.json())
+      .then((data) => {
+        const { fen } = data;
+        console.log(data, "data");
+        setGameState(data);
         setPieceSelected(null);
       });
   };
