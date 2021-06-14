@@ -11,7 +11,6 @@ function App() {
   const {
     fen,
     checkmate,
-    draw,
     stalemate,
     threefoldRepetition,
     insufficientMaterial,
@@ -53,6 +52,19 @@ function App() {
       />
       {error && <div>{error}</div>}
       {checkmate && <h1 className="checkmate">Checkmate</h1>}
+      {stalemate && (
+        <h1 className="talemate">Stalemate. Game ends in a draw</h1>
+      )}
+      {threefoldRepetition && (
+        <h1 className="threefoldRepetition">
+          Threefold repetition. Game ends in a draw
+        </h1>
+      )}
+      {insufficientMaterial && (
+        <h1 className="threefoldRepetition">
+          Insufficient material. Game ends in a draw
+        </h1>
+      )}
       <div className="whose-move">
         {isWhitesTurn ? "White to move" : "Black to move"}
       </div>
@@ -91,13 +103,16 @@ const Wrapper = styled.div`
     font-weight: bold;
   }
 
-  .checkmate {
+  .checkmate,
+  .stalemate,
+  .threefoldRepetition,
+  .insufficientMaterial {
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: "Courier New", Courier, monospace;
     font-weight: bold;
-    font-size: 72px;
+    font-size: 36px;
   }
 `;
 

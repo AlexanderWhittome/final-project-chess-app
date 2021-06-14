@@ -33,7 +33,6 @@ app.put("/game/move", (req, res) => {
     res.json({
       fen: chess.fen(),
       checkmate: chess.in_checkmate(),
-      draw: chess.in_draw(),
       stalemate: chess.in_stalemate(),
       threefoldRepetition: chess.in_threefold_repetition(),
       insufficientMaterial: chess.insufficient_material(),
