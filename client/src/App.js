@@ -56,9 +56,9 @@ function App() {
     });
   };
 
-  useEffect(() => {
-    document.addEventListener("click", handleClick);
-  }, []);
+  // useEffect(() => {
+  //   document.addEventListener("click", handleClick);
+  // }, []);
 
   useEffect(() => {
     if (!isRestarting) {
@@ -118,7 +118,7 @@ function App() {
 
   return (
     <Wrapper>
-      <Chessboard fen={fen} selectedSquare={selectedSquare} />
+      <Chessboard setFen={setFen} fen={fen} selectedSquare={selectedSquare} />
       {error && <div>{error}</div>}
       <div className="whose-move">
         {isWhitesTurn ? "White to move" : "Black to move"}

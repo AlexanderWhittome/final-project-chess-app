@@ -25,18 +25,9 @@ app.post("/game", (req, res) => {
 
 app.put("/game/move", (req, res) => {
   try {
-    const { startingSquare, endingSquare } = req.body;
-    console.log(startingSquare, endingSquare);
-    chess.move(`${startingSquare}-${endingSquare}`, { sloppy: true });
-    // chess.move("e4");
-    // chess.move("e5");
-    // chess.move("Nf3");
-    // chess.move("Nc6");
-    // chess.move("Bc4");
-    // chess.move("a8-b8", { sloppy: true });
-    // chess.move("e1-e2", { sloppy: true });
-    // chess.move("g8-e6", { sloppy: true });
-
+    const { move, from, to, piece, captured } = req.body;
+    chess.move(move ? move : { from, to, piece, captured });
+    console.log(move, "move");
     res.send(chess.fen());
   } catch (error) {
     console.log("ERROR!!!", error);

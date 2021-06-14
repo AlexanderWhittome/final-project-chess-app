@@ -23,7 +23,7 @@ export const getArrayOfImages = (fen) => {
           arr.push(null);
         }
       } else {
-        arr.push(getImageFromCharacter(e));
+        arr.push({ image: getImageFromCharacter(e), pieceId: e });
       }
     });
   return arr;

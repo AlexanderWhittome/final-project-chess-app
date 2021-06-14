@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 // import { Chess } from "chess.js";
 import { getArrayOfImages } from "../helpers";
@@ -6,7 +6,9 @@ import Square from "./Square";
 const ranks = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
-const Chessboard = ({ fen, setState, selectedSquare }) => {
+const Chessboard = ({ fen, setState, selectedSquare, setFen }) => {
+  const [pieceSelected, setPieceSelected] = useState(null);
+
   const arrayOfImages = getArrayOfImages(fen);
   let board = [];
 
@@ -21,6 +23,11 @@ const Chessboard = ({ fen, setState, selectedSquare }) => {
       if (num % 2 === 0) {
         board.push(
           <Square
+            file={files[j]}
+            square={square}
+            setFen={setFen}
+            pieceSelected={pieceSelected}
+            setPieceSelected={setPieceSelected}
             id={id}
             darkSquare
             piece={arrayOfImages[counter]}
@@ -30,6 +37,11 @@ const Chessboard = ({ fen, setState, selectedSquare }) => {
       } else {
         board.push(
           <Square
+            file={files[j]}
+            square={square}
+            setFen={setFen}
+            pieceSelected={pieceSelected}
+            setPieceSelected={setPieceSelected}
             id={id}
             lightSquare
             piece={arrayOfImages[counter]}
