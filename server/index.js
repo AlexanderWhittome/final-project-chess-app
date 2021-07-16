@@ -3,12 +3,26 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const uuid = require("uuid").v4;
 const { initialiseMongoClient, db } = require("./db");
+const socket = require("socket.io");
+const http = require("http");
 
 initialiseMongoClient();
 
 let chess = new Chess();
 
 const app = express();
+
+const server = http.createServer(app);
+
+const io = socket(server);
+
+io.on("connection", (socket) => {
+  console.log("hello");
+
+  socket.on("join", () => {
+    console.log("join the game");
+  });
+});
 
 app.use(bodyParser.json());
 
@@ -27,9 +41,7 @@ app.put("/game/move", (req, res) => {
   try {
     const { move, from, to, piece, captured, promotion } = req.body;
     const moves = move ? move : { from, to, piece, captured, promotion };
-    console.log(moves);
     chess.move(moves);
-    console.log(move, "move");
     res.json({
       fen: chess.fen(),
       checkmate: chess.in_checkmate(),
@@ -51,4 +63,4 @@ app.get("*", (req, res) => {
   });
 });
 
-app.listen(8000, () => console.log(`Listening on port 8000`));
+server.listen(8000, () => console.log(`Listening on port 8000`));

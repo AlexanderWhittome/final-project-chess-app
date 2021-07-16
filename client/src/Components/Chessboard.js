@@ -6,7 +6,7 @@ import Square from "./Square";
 const ranks = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
-const Chessboard = ({ fen, setState, selectedSquare, setGameState }) => {
+const Chessboard = ({ fen, selectedSquare, setGameState }) => {
   const [pieceSelected, setPieceSelected] = useState(null);
 
   const arrayOfImages = getArrayOfImages(fen);

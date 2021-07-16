@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Chessboard from "./Components/Chessboard";
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:8000/");
 
 function App() {
   const [gameState, setGameState] = useState({});
@@ -24,17 +27,22 @@ function App() {
   };
 
   useEffect(() => {
+    console.log("hello2");
+    socket.emit("join");
+    socket.on("join", () => {
+      console.log("hello1");
+    });
+  }, []);
+
+  useEffect(() => {
     if (!isRestarting) {
       return;
     }
-
-    console.log("hello");
 
     setIsRestarting(false);
     fetch("/game", { method: "POST" })
       .then((res) => res.text())
       .then((fen) => {
-        console.log(fen, "fen");
         setGameState({ fen });
       });
   }, [isRestarting]);
