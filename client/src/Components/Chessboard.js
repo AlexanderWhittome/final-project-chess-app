@@ -6,7 +6,7 @@ import Square from "./Square";
 const ranks = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
-const Chessboard = ({ fen, selectedSquare, setGameState }) => {
+const Chessboard = ({ fen, selectedSquare, setGameState, socket }) => {
   const [pieceSelected, setPieceSelected] = useState(null);
 
   const arrayOfImages = getArrayOfImages(fen);
@@ -23,6 +23,7 @@ const Chessboard = ({ fen, selectedSquare, setGameState }) => {
       if (num % 2 === 0) {
         board.push(
           <Square
+            socket={socket}
             file={files[j]}
             square={square}
             setGameState={setGameState}
@@ -37,6 +38,7 @@ const Chessboard = ({ fen, selectedSquare, setGameState }) => {
       } else {
         board.push(
           <Square
+            socket={socket}
             file={files[j]}
             square={square}
             setGameState={setGameState}

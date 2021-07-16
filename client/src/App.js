@@ -27,12 +27,8 @@ function App() {
   };
 
   useEffect(() => {
-    console.log("hello2");
-    socket.emit("join");
-    socket.on("join", () => {
-      console.log("hello1");
-    });
-  }, []);
+    console.log(gameState, "game state");
+  }, [gameState]);
 
   useEffect(() => {
     if (!isRestarting) {
@@ -44,6 +40,8 @@ function App() {
       .then((res) => res.text())
       .then((fen) => {
         setGameState({ fen });
+
+        socket.emit("move", fen);
       });
   }, [isRestarting]);
 
@@ -54,6 +52,7 @@ function App() {
   return (
     <Wrapper>
       <Chessboard
+        socket={socket}
         setGameState={setGameState}
         fen={fen}
         selectedSquare={selectedSquare}
@@ -61,7 +60,7 @@ function App() {
       {error && <div>{error}</div>}
       {checkmate && <h1 className="checkmate">Checkmate</h1>}
       {stalemate && (
-        <h1 className="talemate">Stalemate. Game ends in a draw</h1>
+        <h1 className="stalemate">Stalemate. Game ends in a draw</h1>
       )}
       {threefoldRepetition && (
         <h1 className="threefoldRepetition">

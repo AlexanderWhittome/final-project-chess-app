@@ -17,10 +17,9 @@ const server = http.createServer(app);
 const io = socket(server);
 
 io.on("connection", (socket) => {
-  console.log("hello");
-
-  socket.on("join", () => {
-    console.log("join the game");
+  socket.on("move", (fen) => {
+    console.log("fen1", fen);
+    socket.broadcast.emit("send move", fen);
   });
 });
 

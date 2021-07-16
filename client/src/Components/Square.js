@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const Square = ({
+  socket,
   id,
   piece,
   darkSquare,
@@ -13,19 +14,14 @@ const Square = ({
   square,
   file,
 }) => {
-  // const handleCapture = () => {
-  //   if (pieceSelected.id.toLowerCase() === "p") {
-  //     return `${pieceSelected.file}x${square}`;
-  //   }
-
-  //   return `${pieceSelected.id.toUpperCase()}x${square}`;
-  // };
+  useEffect(() => {
+    socket.on("send move", (fen) => {
+      setGameState({ fen });
+      console.log(fen, "fen");
+    });
+  }, []);
 
   const handleMove = () => {
-    // if (piece) {
-    //   return { move: handleCapture() };
-    // }
-
     const isPawn = pieceSelected.id.toLowerCase() === "p";
     let promotion;
     if (isPawn && (square[1] === "8" || square[1] === "1")) {
@@ -62,6 +58,8 @@ const Square = ({
         console.log(data, "data");
         setGameState(data);
         setPieceSelected(null);
+
+        socket.emit("move", fen);
       });
   };
 
